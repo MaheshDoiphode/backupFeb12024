@@ -1,0 +1,22 @@
+TradingViewAlertsToDiscord
+https://www.freelancer.com/projects/javascript/TradingView-Alerts-Discord/details
+
+
+Project Details
+$30.00 – 250.00 USD
+ BIDDING ENDS IN 5 DAYS, 14 HOURS
+Project Description: TradingView Alerts to Discord
+
+I am looking for a freelancer who can help me set up a system that will send Indicator Alerts from TradingView to Discord.
+
+Specific Requirements:
+- I am specifically interested in receiving Indicator Alerts on Discord.
+- I have some specific indicators in mind that I would like to receive alerts for.
+- I anticipate receiving 5-20 alerts per day, so the system should be able to handle this frequency.
+
+Skills and Experience:
+- Experience with TradingView and Discord integration.
+- Strong knowledge of indicators and how to set up alerts for them.
+- Proficiency in programming languages such as Python or JavaScript.
+
+If you have experience with TradingView and Discord integration, and can help me set up a system to receive Indicator Alerts on Discord, please reach out to discuss the project further.

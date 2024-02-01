@@ -1,0 +1,18 @@
+Chennai Client -
+https://www.freelancer.com/projects/javascript/HTML-Word-File-Converter/details
+
+
+I am looking for a software developer proficient in Python, JavaScript, and Java. The primary task for the project will be to create a software that can convert HTML output into downloadable Word files. At the backend we use My SQL.
+
+Key Responsibilities:
+- Design and develop a program that accurately transfers text content, images, and tables from HTML to Word documents
+- Ensure there is no loss of information or image quality during the conversion
+- Optimize the process for maximum efficiency
+
+Ideal Candidate:
+- Proficient in Python, JavaScript, and Java
+- Experience with HTML, Word file generation, and conversion tools
+- Strong understanding and experience of software development and coding
+- Capacity to meet the deadlines
+
+If you believe you are a perfect fit for this task, kindly send in your bids.

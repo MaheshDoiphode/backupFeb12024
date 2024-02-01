@@ -1,0 +1,13 @@
+SignatureRequiredInvoiceGenerator
+
+https://www.freelancer.com/projects/software-architecture/Signature-Required-Invoice-Generator/details
+
+I'm looking for an experienced software developer who can build a system to generate PDF invoices that require signatures. The key features I require are:
+
+able to run on a tablet so web or app or your idea
+
+able to enter information and generate the terms and conditions of a term so the client will need to sign it for me to start working. I then need another signature saying they are 100% happy with the work. and a statement that says they paid and put it together.
+
+see the attachment for example output
+
+please respond with how you would tackle this project.

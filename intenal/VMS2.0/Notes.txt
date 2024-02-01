@@ -1,0 +1,575 @@
+A visitor management system for the IT company which helps in inviting the visitor and all through a process like i explained below. I want you to analyze the things i have thought of and tell me if i should change something and suggest me if i can add more things in it. 
+Tables in the DB -
+Table 1. Visitor -  Stores info about the Visitor. 
+VisitorID(PK), Title (Mr, Mrs), FName, LName, VisitorEmail, VisitorNumber, VisitorAddress, IdentityType(PAN Card, Passport), IdentityNumber, Image. 
+Table 2. Visits - It stores information about the Visits done to the company. 
+VisitID (PK), VisitorID (FK), HostName, HostEmail, Purpose of Visit, ExpectedArrival, ExpectedDepart, Visit Duration, RequestStatus (Approved, Rejected), CheckIn(Actual when user comes), CheckOut (Actual checkout by the user), FeedBack, VisitStatus(Completed, Scheduled, Missed, Rejected).
+Table 3. Notifications - It stores each and every mail/event/notification that is being sent from host, admin, and visitor. 
+NotificationID (PK), VisitID(FK), Message, NotificationType (Feedback, Request to admin, Confirmation to host, Confirmation to Visitor, Inform to Reception). 
+Table 4. Users - This is a temporary table which is not required in real time as we will be using the microsoft authentication and all in real time when project goes live but until then for the developement purpose we will store host information like host name, email and all, and all in this table. 
+
+
+The Host is a company employee who goes to the portal and fills up the required details like Visitor name, Visitor email address, purpose of the visit, ExpectedArrival, ExpectedDepart,  (If the visitor has already visited before which we will find by checking the DB through the entered email id, if yes then while filling the form user will be able to tell if its right).
+
+The request is then sent to the admin, admin either accept or reject it. If rejected then only the notification email will be sent to the host with the reason and the Requeststatus of the visit will be updated along with the VisitStatus field to set to Rejected. 
+If accepted then the host and visitor will be send a mail about the same. The host outlook calendar will be booked and the calendar of the Visitor will also be booked according to the service he's using, gmail, outlook or anything. 
+When the Admin accepts the request, at that time a onetime link will be generated which will be a form sent to the Visitor to fill his details if he's not before registered and he has to fill the details to feed to the Visitor table i gave you above. If user is already registered then he will not get that link. 
+A notification will be sent to the receptionist also when the request is approved by the admin with only the required details that might be necessary at the reception and not more revealing. 
+
+When the Visitor comes to the office then the CheckIn will be updated and when he leaves then the checkout will be updated. Now as there might be visitors whose visit is for multiple days so we will check if the visit duration is more than 1 day and if no then we will send the feedback form to the visitor on his mail and VisitStatus field will also be updated to Completed. If the duration is more than 1 day then for each day a new visitID will be generated and we will send the feedback form and update the VisitStatus on that day only.
+
+____
+
+Tables:
+1. Visitor: VisitorID, Title, FName, LName, VisitorEmail, VisitorNumber, Address, IdentityType, IdentityNumber, Image
+
+2. Visits: VisitID, ParentVisitID, VisitorID, HostName, HostEmail, Purpose, ExpectedArrival, ExpectedDepart, CheckIn, CheckOut, RequestStatus, FeedBack, VisitStatus
+	[ParentVisitID Example:
+
+Let's say a visitor is scheduled for a 3-day visit. The first day's entry might look like this:
+VisitID: 101
+ParentVisitID: 101 (same as VisitID for the first day)
+VisitDate: 2023-09-13
+The second day's entry would be:
+VisitID: 102
+ParentVisitID: 101 (refers to the original VisitID)
+VisitDate: 2023-09-14
+The third day's entry:
+VisitID: 103
+ParentVisitID: 101
+VisitDate: 2023-09-15
+This way, all related visits are linked together through the ParentVisitID.]
+
+
+
+
+3. Notifications: NotificationID, VisitID, Message, Type, NotificationGenerated, NotificationStatus
+
+4. Users: UserID, UserName, UserEmail
+
+5. Secondary_Info: InfoID, VisitorID, AltEmail, AltContact, EmergencyContact
+
+6. URL Management: URLID, VisitID, Expiry, GenerateDate, Status, Type
+________________________________________________
+Application Flow:
+
+Visit Initiation:
+
+Host logs into the portal.
+Host fills out details: VisitorName, Email, Purpose, ExpectedArrival, ExpectedDepart.
+System checks if visitor has prior visits using email.
+Admin Review:
+
+Admin receives the visit request.
+Admin can approve or reject based on details provided.
+If rejected, a notification is sent to the host with a reason.
+Visitor Notification:
+
+Upon approval, a unique one-time URL is generated.
+This URL is emailed to the visitor for registration or terms acceptance.
+Host also receives a confirmation email.
+Visitor Registration:
+
+New visitors use the URL to fill out their details: Name, Address, IdentityType, IdentityNumber, Image.
+Returning visitors review their details and accept terms and conditions.
+Calendar Booking:
+
+Host's Outlook calendar is booked for the visit duration.
+Visitor receives a calendar invite (compatible with Gmail, Outlook, etc.).
+Visit Execution:
+
+Reception is notified of the expected visitor.
+On arrival, visitor's CheckIn time is recorded.
+On departure, CheckOut time is noted.
+Feedback Collection:
+
+Post-visit, the visitor receives a feedback form via email.
+Feedback is stored and associated with the visit record.
+
+
+
+______________________________
+Scalable -
+Emergency Contacts: Consider adding an emergency contact field in the Visitor table. This can be useful in case of any emergencies.
+
+Visitor Badges: Generate visitor badges with unique identifiers (like a QR code) for easy check-in/check-out and to ensure security within the premises.
+
+Visitor History: Consider having a feature where hosts can view the history of their past visitors. This can be useful for recurring meetings or events.
+
+Analytics: Implement an analytics dashboard for admins to view statistics like the number of visitors per day/week/month, most frequent visitors, most active hosts, etc.
+
+Visitor Agreement: Before check-in, have visitors agree to a terms of visit or non-disclosure agreement, especially if they'll be exposed to sensitive company information.
+
+Integration with Building Security: If the company has electronic access controls (like card swipes or biometrics), consider integrating the system with it to grant temporary access to visitors.
+
+_____________________________________
+
+APIS
+
+Visit Management API:
+
+Endpoint: POST /visits
+Request Body:
+{
+  "visitorEmail": "string",
+  "hostName": "string",
+  "purpose": "string",
+  "expectedArrival": "datetime",
+  "expectedDepart": "datetime"
+}
+Response Body:
+ 
+ 
+{
+  "status": "success",
+  "visitID": "int"
+}
+Visitor API:
+
+Endpoint: POST /visitors
+Request Body:
+ 
+ 
+{
+  "title": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "identityType": "string",
+  "identityNumber": "string"
+}
+Response Body:
+ 
+ 
+{
+  "status": "success",
+  "visitorID": "int"
+}
+Notification API:
+
+Endpoint: POST /notifications
+Request Body:
+ 
+ 
+{
+  "visitID": "int",
+  "message": "string",
+  "type": "string"
+}
+Response Body:
+ 
+ 
+{
+  "status": "success",
+  "notificationID": "int"
+}
+__
+
+Calendar API:
+
+Endpoint: POST /calendar/book
+Request Body:
+{
+  "visitID": "int",
+  "startTime": "datetime",
+  "endTime": "datetime"
+}
+Response Body:
+{
+  "status": "success",
+  "calendarEventID": "string"
+}
+__
+Feedback API:
+
+Endpoint: POST /feedback
+Request Body:
+ 
+ 
+{
+  "visitID": "int",
+  "feedbackText": "string"
+}
+Response Body:
+{
+  "status": "success",
+  "feedbackID": "int"
+}
+URL Management API:
+
+Endpoint: POST /url/generate
+Request Body:
+ 
+ 
+{
+  "visitID": "int",
+  "expiry": "datetime"
+}
+
+Response Body:
+{
+  "status": "success",
+  "urlToken": "string"
+}
+
+________
+Folder Structure -
+VMS2.0 (Root Folder)
+│
+├───Program.cs
+├───appsettings.json
+│
+├───Models
+│   ├───Visitor.cs
+│   ├───Visit.cs
+│   ├───Notification.cs
+│   ├───User.cs
+│   ├───SecondaryInfo.cs
+│   └───URLManagement.cs
+│
+├───DTOs
+│   ├───VisitorDTO.cs
+│   ├───VisitDTO.cs
+│   ├───NotificationDTO.cs
+│   └───UserDTO.cs
+│   ├───SecondaryInfoDTO.cs
+│   └───URLManagementDTO.cs
+│
+├───Repositories
+│   ├───IRepository
+│   │   ├───IVisitorRepository.cs
+│   │   ├───IVisitRepository.cs
+│   │   └───INotificationRepository.cs
+│   │
+│   └───Repository
+│       ├───VisitorRepository.cs
+│       ├───VisitRepository.cs
+│       └───NotificationRepository.cs
+│
+├───Data
+│   ├───VMSDbContext.cs
+│
+├───Services
+│   ├───IService
+│   │   ├───IVisitorService.cs
+│   │   ├───IVisitService.cs
+│   │   └───INotificationService.cs
+│   │
+│   └───Repository
+│   │   ├───VisitorService.cs
+│   │   ├───VisitService.cs
+│   │   └───NotificationService.cs
+│
+└───Controllers
+    ├───VisitorController.cs
+    └───VisitController.cs
+
+
+
+
+______
+
+APIS with 3 controllers -
+1. VisitorController
+1.1 Create Visitor
+Endpoint: POST /api/visitors
+Request Body:
+json
+Copy code
+{
+  "Title": "Mr.",
+  "FName": "John",
+  "LName": "Doe",
+  "VisitorEmail": "john.doe@example.com",
+  "VisitorNumber": "1234567890",
+  "VisitorAddress": "123 Main St",
+  "IdentityType": "Passport",
+  "IdentityNumber": "XYZ123456",
+  "Image": "Base64EncodedImage"
+}
+Response Body:
+json
+Copy code
+{
+  "VisitorId": 1,
+  "Message": "Visitor created successfully."
+}
+1.2 Get Visitor by ID
+Endpoint: GET /api/visitors/{id}
+Response Body:
+json
+Copy code
+{
+  "VisitorId": 1,
+  "Title": "Mr.",
+  "FName": "John",
+  "LName": "Doe",
+  "VisitorEmail": "john.doe@example.com",
+  "VisitorNumber": "1234567890",
+  "VisitorAddress": "123 Main St",
+  "IdentityType": "Passport",
+  "IdentityNumber": "XYZ123456",
+  "Image": "Base64EncodedImage"
+}
+2. VisitController
+2.1 Create Visit
+Endpoint: POST /api/visits
+Request Body:
+json
+Copy code
+{
+  "HostName": "Jane",
+  "HostEmail": "jane@example.com",
+  "Purpose": "Meeting",
+  "VisitorId": 1
+}
+Response Body:
+json
+Copy code
+{
+  "VisitId": 1,
+  "Message": "Visit created successfully."
+}
+2.2 Update Visit Status
+Endpoint: PUT /api/visits/{id}/status
+Request Body:
+json
+Copy code
+{
+  "VisitStatus": "Completed"
+}
+Response Body:
+json
+Copy code
+{
+  "Message": "Visit status updated successfully."
+}
+3. NotificationController
+3.1 Send Notification
+Endpoint: POST /api/notifications
+Request Body:
+json
+Copy code
+{
+  "Message": "Your visit is approved.",
+  "NotificationType": "Email",
+  "VisitId": 1
+}
+Response Body:
+json
+Copy code
+{
+  "NotificationId": 1,
+  "Message": "Notification sent successfully."
+}
+3.2 Get Notification Status
+Endpoint: GET /api/notifications/{id}/status
+Response Body:
+json
+Copy code
+{
+  "NotificationId": 1,
+  "NotificationStatus": "Sent"
+}
+
+
+_______
+DTO 
+public class InitiateVisitDTO
+    {
+        public string VisitorEmail { get; set; }
+        public string? VisitorNumber { get; set; }  
+        public string? VisitorName { get; set; }
+        public string Purpose { get; set; }
+        public DateTime ExpectedArrival { get; set; }
+        public DateTime ExpectedDepart { get; set; }
+    }
+public class NotificationDTO
+    {
+        public int NotificationID { get; set; }
+
+        [Required]
+        public int VisitID { get; set; }
+
+        [Required]
+        public string Message { get; set; }
+
+        [Required]
+        public string NotificationType { get; set; }
+
+        [Required]
+        public DateTime NotificationGenerated { get; set; }
+
+        [Required]
+        public string NotificationStatus { get; set; }
+    }
+public class SecondaryInfoDTO
+    {
+        public int SecondaryInfoID { get; set; }
+
+        [Required]
+        public int VisitorID { get; set; }
+
+        [EmailAddress]
+        public string AlternateEmail { get; set; }
+
+        public string AlternateContact { get; set; }
+
+        public string AlternateEmergencyContact { get; set; }
+    }
+    public class URLManagementDTO
+    {
+        public int URLID { get; set; }
+
+        [Required]
+        public int VisitID { get; set; }
+
+        [Required]
+        public DateTime ExpirationTime { get; set; }
+
+        [Required]
+        public DateTime GenerateDate { get; set; }
+
+        [Required]
+        public string URLStatus { get; set; }
+
+        [Required]
+        public string URLType { get; set; }
+    }
+public class UserDTO
+    {
+        public int UserID { get; set; }
+
+        [Required]
+        public string UserName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string UserEmail { get; set; }
+    }
+ public class VisitDTO
+    {
+        public int VisitID { get; set; }
+
+        public int? ParentVisitID { get; set; }
+
+        [Required]
+        public int VisitorID { get; set; }
+
+        [Required]
+        public string HostName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string HostEmail { get; set; }
+
+        [Required]
+        public string Purpose { get; set; }
+
+        [Required]
+        public DateTime ExpectedArrival { get; set; }
+
+        [Required]
+        public DateTime ExpectedDepart { get; set; }
+
+        public DateTime? CheckIn { get; set; }
+
+        public DateTime? CheckOut { get; set; }
+
+        [Required]
+        public string RequestStatus { get; set; }
+
+        public string Feedback { get; set; }
+
+        [Required]
+        public string VisitStatus { get; set; }
+    }
+
+    public class VisitorDTO
+    {
+        public int VisitorID { get; set; }
+
+        [Required]
+        public string Title { get; set; }
+
+        [Required]
+        public string FName { get; set; }
+
+        [Required]
+        public string LName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string VisitorEmail { get; set; }
+
+        [Required]
+        public string VisitorNumber { get; set; }
+
+        public string VisitorAddress { get; set; }
+
+        [Required]
+        public string IdentityType { get; set; }
+
+        [Required]
+        public string IdentityNumber { get; set; }
+
+        public byte[] Image { get; set; }
+    }
+
+
+
+_____________________________________________
+Hardcoded -  
+
+VisitService.InitiateVisitAsync.HostSendVisitNotificationToAdminForApprovalAsync - hard coded the admin email passed to it. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

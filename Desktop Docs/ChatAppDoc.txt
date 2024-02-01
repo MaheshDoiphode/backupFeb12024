@@ -1,0 +1,76 @@
+WhatsApp like System using SignalR -
+Groups, User, Session, FanOut, UserRegistration, PushNotification, SMS will be different controllers we will have. 
+
+Table 1 - User
+EmailID(PK, Varchar), Name(Varchar), AuthenticationCode(varchar), CreationTime(DateTime), LastSeen(DateTime)(what i was thinking is that as this is a webbased app I am gonna develop so it doesn't have any localDB maintained like the android, so we will use this to get the new messages that are missed by the user greater than this timestamp)
+
+
+- RegisterAccount api - User first enters his EmailID and after clicking on getOTP(exposedAPI of SMS_Controller) will update the User table with EmailID, a new AuthenticationCode, and CreatedTime. 
+- AuthenticateUser api - When user enters the code a new api authenticate(EmailID, AuthenticationCode) will be called which will authenticate the user.
+- Login api - this api will take take the EmailID and send back the OTP and after validation user will be logged in and then a connection will be created with the routing service(Tell me if we have to store the connections in the database or somewhere, is it needed and how this connection will work. My understanding says that the when user logs in, a connection will be generated with the routing service and stored in the database, and whenever any message has to be sent then the chatService will fetch the connection to send to the proper user/group accordingly. When user logs off then the connection will be removed from the database. If this is correct then how the private and group messages send and receive will work, explain properly with the tables and all we have have in our application with the application flow. We can use sessionID or something so that it will be like great to check whom to send and all and not have to maintain separate table for it, I am not sure what is it.)
+Table 2 - Group
+GroupID(PK, varchar), Name(Varchar), CreatedTime, MembersCount(int)
+Table 3 - GroupMembers 
+[GroupID(FK), EmailID(FK)](CompositeKey), type(User/Admin, Varchar), JoinedDate(DateTime)
+Table 4 - Session
+SessionID(PK, Varchar), CreateTime, Type(Private/Group, Varchar), Counter(long)
+Table 5 - SessionMessage
+[SessionID(FK, Varchar), TimeStamp(DateTime)](CompositeKey), CreateTime(DateTime), Type(Private/Group, Varchar), SenderEmailID, ReceipientID(FK(can be a GroupID, EmailID of the user), Varchar)
+Table 6 - PushMessage (Messages that are not sent to the offline users)
+MessageID(PK), SenderEmailID(FK), ReceipientEmailID(FK), Type(Status/Data), Message(varchar)
+
+- InitiateDirectChatSession api - this will take the SenderEmailID, ReceipientEmailI and will return the SessionID in return, I guess this will be called when the user clicks on any user, correct me if wrong.
+- SendMessage api - this will take SessionID, MessageType(Status[Delivered/Seen]/Data), Message and it will return the MessageID in return.
+- ReadNewMessages api - As we don't have any localDB or something and neither we are storing the messages in the DB for privacy purpose, I am thinking that when the user is online then he will receive the messages over the websocket connection, signalR and if he's not online then we will store those messages in the PushMessage table and when the user comes online, i was thinking he will call this api after forming a new connection we will deliver those messages to the user(suggest according to you what will be best).
+- InitiateGroupChatSession - this api will take groupInfo or something from the user and then return a groupSessionID to the user to interact with and all(elaborate this in deep to me as I am not able to understand how this will work, the groupsessionID will be stored by the user right to send the messages to that session and all the users subscribed to that connection will receive the messages, is it?).
+- AddUserToGroup - this api will take up EmailID, GroupID and will be responsible for adding new members to the group, this can be done only by admin.
+- RemoveFromGroup- this api will take EmailID, GroupID and will be for removing the user from the group, only by admins.
+- PromoteToAdmin - this api will take EmailID, GroupID and will be for promoting the user to the admin, as this api will be called while creating the group and if admin wants to promote someone. 
+- We might need a new api for creating the group as well right, elaborate.
+
+
+
+__
+
+
+_-------------------------------------------
+FLOW
+
+User Login and Connection Establishment:
+
+User: Logs in via the Login API.
+User Service: Authenticates user, if successful, triggers the RoutingService to establish a SignalR connection.
+RoutingService: Establishes a connection, generates a ConnectionId, and stores the mapping between ConnectionId and EmailID in a new table, say ConnectionMappingTable.
+User Initiates a Private Chat:
+User: Clicks on another user to initiate a chat, triggering the InitiateDirectChatSession API.
+SessionService: Generates a unique SessionID for this conversation, updates the Session table, and returns the SessionID to the user.
+User Sends a Message:
+User: Types a message and hits send, triggering the SendMessage API with the SessionID.
+RoutingService: Resolves the recipient's ConnectionId from the ConnectionMappingTable using the SessionID and Session table.
+FanOutService: If recipient is online, sends the message via SignalR. If offline, stores the message in the PushMessage table via PushNotificationService.
+User Initiates a Group Chat:
+
+User: Creates or selects a group, triggering InitiateGroupChatSession or CreateGroup API.
+GroupService: In case of creation, generates a unique GroupID, updates the Group and GroupMembers tables, and returns the GroupID to the user. For existing groups, returns the GroupSessionID.
+User Sends a Message to Group:
+
+User: Sends a message to the group, triggering the SendMessage API with the GroupSessionID.
+RoutingService: Resolves the ConnectionIds of all group members from the ConnectionMappingTable using the GroupSessionID and GroupMembers table.
+FanOutService: Sends the message to all online group members via SignalR. Stores undelivered messages in the PushMessage table via PushNotificationService for offline members.
+User Receives an OTP:
+
+User: Requests OTP for verification, triggering the getOTP API.
+SMSService: Generates and sends OTP via SMS, updates the User table with the AuthenticationCode.
+User Reads New Messages:
+
+User: Comes online, triggers the ReadNewMessages API.
+PushNotificationService: Retrieves undelivered messages from the PushMessage table, returns them to the user.
+FanOutService: Sends the messages to the user via SignalR.
+User Group Management:
+
+User: Adds/Removes a member to/from the group or promotes a member to admin, triggering the respective APIs.
+GroupService: Updates the GroupMembers table accordingly, returns success status to the user.
+User Logout and Connection Termination:
+
+User: Logs out, triggering a logout API.
+RoutingService: Terminates the SignalR connection, removes the mapping from the ConnectionMappingTable.

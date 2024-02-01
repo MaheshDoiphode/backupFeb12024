@@ -1,0 +1,89 @@
+Greedy  
+
+Instead of picking the best route from 24! routes, we can travel by choosing the next closest city from the current city. We can keep doing this until all the cities have been visited.
+This is the "Greedy approach" for solving a problem.
+
+Sometimes greedy algorithms fail to find the optimal solution because this algorithm does not consider all the available data. The choice made by a greedy algorithm may depend on the choices it has made now, but it is not aware of future choices it could make.
+
+ in a greedy approach, each step is chosen such that it is the best choice among all feasible choices that are available and never reconsiders its choices. Once a decision is made, it does not look back and make changes to its earlier decision. In terms of optimizing a solution, this simply means that the greedy solution will find local optimum solutions.
+
+__
+
+Analysis of algorithms is all about estimating the number of computing resources like the amount of time, memory, etc. needed to execute a given algorithm before implementing it as a program. 
+Computation time: The instructions take time to execute and its performance entirely depends on the efficiency of an algorithm chosen
+
+Memory: Data structures take space so it is very important to identify what kind of data structures can be used
+
+Power: How much power is consumed
+
+
+_______________________
+
+LinkedList
+Operations on a linked list
+Let us understand the operations in detail using an example.
+
+Addition of elements to a linked list
+
+Add method adds a new node with the respective data at the end of the linked list (say block number 95).
+
+
+
+Algorithm: Adding an element to a linked list
+
+Create a new node with the  data
+
+For an empty linked list, make the newly created node as head as well as tail
+
+Else, Assign the reference of the newly created node to the address portion of the tail node
+
+Make the tail refer to the newly created node
+-
+Searching for an element in a linked list
+When some specific file content has to be fetched from the file (file content at block 88), the search method of the linked list is used which starts searching for the specific data from the first block until the required block is found.
+
+
+
+The algorithm for searching an element in a linked list is given below.
+
+Take a temp (temporary) reference and assign it with the head node
+
+While temp is not null,
+
+If the data at temp is equal to the data being searched, return temp
+
+Else, make the next node as a temp
+
+If data is not found then, return null
+-
+Displaying the elements of a linked list
+Algorithm: Display the elements of a linked list
+
+Take a temp (temporary) reference and assign it with the head node
+
+While temp is not null
+
+Display the data at the temp node
+
+Make the next node as the temp
+-
+Inserting an element to the linked list
+If a new content(content in block 90) has to be stored in the file in a specific location, for example-between blocks 88 and 95, the insert method of the linked list is used.
+
+
+The algorithm to insert an element in a linked list is given below.
+
+Create a new node with the given data
+
+Find the node with a data value equal to the value of the databefore passed. If found then,
+
+Call this found node as the nodeBefore
+
+Make the link of the new node refer to the node at the link of nodeBefore
+
+Make the link of nodeBefore refer to the new node
+
+If the link of the new node is null, make it the tail node
+
+If a node with dataBefore is not found, display an appropriate error message
+-

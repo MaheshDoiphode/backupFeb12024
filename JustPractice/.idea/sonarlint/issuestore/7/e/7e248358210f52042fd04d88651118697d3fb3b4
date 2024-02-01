@@ -1,0 +1,15 @@
+
+7
+java:S1220""Move this file to a named package.8¯¯ ·µ1
+_
+java:S2259s"BA "NullPointerException" could be thrown; "temp" is nullable here.(šòÚ´8Æ¯ ·µ1
+[
+java:S3516b"9Refactor this method to not always return the same value.(·Ô–ðþÿÿÿÿ8Æ¯ ·µ1
+U	java:S106X"9Replace this use of System.out or System.err by a logger.(ÄºÎ”8Ì¯ ·µ1
+Z	java:S106Z"9Replace this use of System.out or System.err by a logger.(Åæ°‹úÿÿÿÿ8Ì¯ ·µ1
+Z	java:S106]"9Replace this use of System.out or System.err by a logger.(·üâ’üÿÿÿÿ8Ì¯ ·µ1
+U	java:S106^"9Replace this use of System.out or System.err by a logger.(ÄºÎ”8Ì¯ ·µ1
+Z	java:S106{"9Replace this use of System.out or System.err by a logger.(Åæ°‹úÿÿÿÿ8Í¯ ·µ1
+V	java:S106œ"9Replace this use of System.out or System.err by a logger.(Û¼®ö8Ò¯ ·µ1
+D	java:S131ž""Add a default case to this switch.(žžŒ¹ÿÿÿÿÿ8Ó¯ ·µ1
+V	java:S106¶"9Replace this use of System.out or System.err by a logger.(Õ°ôÒ8Ö¯ ·µ1

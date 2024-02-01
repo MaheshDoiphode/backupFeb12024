@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            margin: 20px 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header img {
+                max-width: 150px;
+                display: block;
+                margin: 0 auto;
+                animation: bounce 1s infinite;
+            }
+
+        .extraordinary {
+            font-size: 24px;
+            text-align: center;
+            animation: slideFadeIn 5s infinite;
+            opacity: 0;
+            position: relative;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+            .footer a {
+                margin: 0 10px;
+                text-decoration: none;
+                color: #333;
+            }
+
+            .footer img {
+                width: 30px;
+                height: 30px;
+                transition: transform 0.3s;
+            }
+
+                .footer img:hover {
+                    transform: scale(1.1);
+                }
+
+        @keyframes slideFadeIn {
+            0%, 100% {
+                opacity: 0;
+                left: -100%;
+            }
+
+            50% {
+                opacity: 1;
+                left: 0;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container header">
+        <img src="https://www.ncs.co/dam/jcr:68e48c73-c3bf-443b-bf66-cb5f4e8bc7fe/ncs_logo.png" alt="NCS Logo">
+        <p class="extraordinary">Make Extraordinary Happen</p>
+    </div>
+    <div class="container">
+        <h2>Details</h2>
+        <p>{additionalMessage}</p>
+        <p>Please find the attached document for more details.</p>
+        {content}
+        <h3>Instructions for Visitors:</h3>
+        <ul>
+            <li>Please arrive 10 minutes prior to your scheduled visit time.</li>
+            <li>Upon arrival, check in at the reception desk and provide a valid ID.</li>
+            <li>Wear the visitor badge at all times during your visit.</li>
+            <li>Follow all safety and health guidelines, especially in the current pandemic situation.</li>
+            <li>Do not access restricted areas without proper authorization.</li>
+            <li>Return the visitor badge to the reception desk before leaving.</li>
+        </ul>
+    </div>
+    <div class="container footer">
+        <a href="https://www.facebook.com/NCSGroupSG" target="_blank"><img src="https://cdn3.iconfinder.com/data/icons/picons-social/57/46-facebook-512.png" alt="Facebook"></a>
+        <a href="https://www.linkedin.com/company/ncs-group" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384014.png" alt="LinkedIn"></a>
+        <a href="https://www.youtube.com/@NCSGroup" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/717/717426.png" alt="YouTube"></a>
+        <a href="https://www.instagram.com/ncsgroupofficial/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384015.png" alt="Instagram"></a>
+        <p>Contact us: contact@ncs.com</p>
+        <p>Address: 123 NCS Lane, Singapore</p>
+        <p>Disclaimer: This email and any attachments are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error, please notify the sender immediately and delete this email from your system.</p>
+    </div>
+</body>
+</html>

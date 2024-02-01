@@ -1,0 +1,16 @@
+<style> table { border: 2px solid #333; border-collapse: collapse; } th, td { border: 1px solid #333; padding: 5px 10px; } th { background-color: #eee; } td { text-align: center; } </style>
+
+<p><strong>Table: Users</strong></p><table><thead><tr><th>UserID</th><th>Username</th><th>Password</th><th>RoleID</th></tr></thead><tbody><tr><td>U101</td><td>admin</td><td>hashed1</td><td>R201</td></tr><tr><td>U102</td><td>receptionist</td><td>hashed2</td><td>R202</td></tr></tbody></table>
+
+<p><strong>Table: Roles</strong></p><table><thead><tr><th>RoleID</th><th>RoleName</th></tr></thead><tbody><tr><td>R201</td><td>Admin</td></tr><tr><td>R202</td><td>Receptionist</td></tr></tbody></table>
+
+<p><strong>Table: Visitors</strong></p><table><thead><tr><th>VisitorID</th><th>Name</th><th>Contact</th></tr></thead><tbody><tr><td>V501</td><td>John Doe</td><td>9876543210</td></tr><tr><td>V502</td><td>Jane Smith</td><td>8765432109</td></tr></tbody></table>
+
+<p><strong>Table: Visits</strong></p><table><thead><tr><th>VisitID</th><th>VisitorID</th><th>CheckInTime</th><th>CheckOutTime</th><th>FeedbackText</th></tr></thead><tbody><tr><td>V701</td><td>V501</td><td>2023-08-23 09:00:00</td><td>2023-08-23 12:00:00</td><td>Good experience</td></tr><tr><td>V702</td><td>V502</td><td>2023-08-23 10:30:00</td><td>2023-08-23 13:30:00</td><td>Helpful receptionists</td></tr></tbody></table>
+
+<p><strong>Table: Blacklist</strong></p><table><thead><tr><th>BlacklistID</th><th>VisitorID</th><th>BlacklistReason</th></tr></thead><tbody><tr><td>B1001</td><td>V502</td><td>Inappropriate behavior</td></tr></tbody></table>
+
+<p><strong>Table: Hosts</strong></p><table><thead><tr><th>HostID</th><th>Name</th><th>CalendarID</th></tr></thead><tbody><tr><td>H1201</td><td>Alex Johnson</td><td>C1101</td></tr><tr><td>H1202</td><td>Maria Gupta</td><td>C1102</td></tr></tbody></table>
+
+<p><strong>Table: Calendar</strong></p><table><thead><tr><th>CalendarID</th><th>HostID</th><th>BookedDate</th></tr></thead><tbody><tr><td>C1101</td><td>H1201</td><td>2023-08-23</td></tr><tr><td>C1102</td><td>H1202</td><td>2023-08-24</td></tr></tbody></table>
+

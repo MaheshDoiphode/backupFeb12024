@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Finance News</title>
+  
+  <style>
+   /* Styles */
+  </style>
+
+</head>
+
+<body>
+
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container" style="height:100vh">
+  <div id="tradingview_2a8a9"></div>
+  <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+  new TradingView.widget(
+  {
+  "autosize": true,
+  "symbol": "BSE:BSE500",
+  "interval": "D",
+  "timezone": "Etc/UTC",
+  "theme": "light",
+  "style": "1",
+  "locale": "in",
+  "toolbar_bg": "#f1f3f6",
+  "enable_publishing": false,
+  "allow_symbol_change": true,
+  "container_id": "tradingview_2a8a9"
+}
+  );
+  </script>
+</div>
+<!-- TradingView Widget END -->
+
+  <div class="news-container">
+
+    <h2>Latest Finance News</h2>
+  
+    <div class="news-list">
+      <!-- News articles will be added here -->
+    </div>
+
+  </div>
+
+  <script>
+
+    // API settings
+    const API_URL = 'https://yahoo-finance15.p.rapidapi.com/api/yahoo/ne/news';
+    const API_KEY = '1eef4c78f1mshf1f9419ea5634d7p1c83d0jsn3c9a2e98a2df';
+
+    // Fetch news data
+    async function getNews(){
+
+      const response = await fetch(API_URL, {
+        headers: {
+          'X-RapidAPI-Key': API_KEY
+        }  
+      });
+
+      return response.json();
+
+    }
+    
+    // Display news articles
+    async function showNews(){
+
+      const newsData = await getNews();
+
+      let newsHtml = '';
+
+      newsData.forEach(article => {
+
+	if(article.image_url){
+  newsHtml += `<img src="${article.image_url}">`; 
+}
+
+        newsHtml += `
+          <div class="news-item">
+            <h3>${article.title}</h3>
+            <p>${article.pubDate}</p>
+            <p>${article.source}</p>
+            <a href="${article.link}" target="_blank">Read more</a>
+          </div>
+        `;
+
+	
+
+      });
+
+      document.querySelector('.news-list').innerHTML = newsHtml;
+
+    }
+
+    showNews();
+
+  </script>
+
+</body>
+</html>

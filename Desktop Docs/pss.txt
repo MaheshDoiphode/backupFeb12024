@@ -1,0 +1,15 @@
+https://gitlab.stackroute.in/ - N#1
+singtel.percipio.com - N#1
+Netscalar AAA - N#1
+
+
+HR-Central - https://performancemanager10.successfactors.com/login?company=C0001088737P
+Time Log - https://agile.ncs.com.sg/TimelogWeb
+
+
+https://stackbooks.stackroute.in/ - Gitlab auth
+https://hobbes.stackroute.in/#/ - Gitlab Auth
+https://vlabs.stackroute.in/ email - Hello@2023
+https://teamlease.paybooks.in/mylogin.aspx - N#1
+
+MySQL - root-root:3306

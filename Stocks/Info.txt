@@ -1,0 +1,80 @@
+Strategy EMA3 and EMA 30 crossover -
+Script - continuously monitor and develop a mathematical formula or something to determine the price where we should square off the position. But it might happen that current market conditions are such that they might suggest that the stock will go even higher based on things happening currently, in that case the indicator should specify the reason why to wait.
+
+
+
+
+
+
+
+
+Some observations from backtesting -
+- sometimes it is happening that the EMA3 comes just near the EMA30 and without touching it just goes up, at these points, the RSI is more than 40 which nullifies this signal and these signals turns out to be great. I think instead of only taking signals below rsiOverSold we should check if the RSI is not on the mark of going down and if not then take the buy position accordingly with other factors. 
+- At some points when the RSI is going down but there is a crossover of the EMA3 and EMA30 even for a short time, the strategy is taking the position which is not good, as this is generating false signal.
+- For the closing entry we have to develope a new formula because sometimes it happens that RSI is rising a lot and the strategy is closing down the position, it should check the conditions going on in the market before doing anything.
+- In the sideways market it happens that sometimes there is a pull back in that case we have to check the conditions with the traders mentality, volume and stuff to predict if the market will go down or not, I have observed that whenever EMA30 is gradually increasing very slowly but not declining and EMA3 is falling suddenly, it will recover soon.
+- The strategy should not buy when it's just a small crossover as we can determine it on the basis of EMA30 being gradually decreasing but EMA3 rising as in this case the EMA30 is showing a downtrend which is average of larger data right. 
+- In some cases it happens that EMA3 is rising suddenly, EMA30 is also rising very slowly but eventually both fails and in this case neither RSI, bollinger or anything else will help, but I have found that in this case if we can look up for Doji or Hammer or any effective reversal pattern or something based on the chart then we can be sure that we have to square off the position as the trend will be changing.
+- We have to make sure we dont take any position in the sideways market. 
+
+______________________________________________________________
+major Stocks affecting nifty.
+Call put ratio.
+Option chain -> Delivery/Intraday -> Expiry 1 week.
+RSI is high at some point where stock price is low when overbought but other times RSI is low but still stock price is high, and vice versa, edge case.
+BB -> green candles touching upper band && no reversal pattern -> Buy, Vise versa.
+
+Options sell/buy in Call/Put
+
+NEVER GO AGAINST MARKET. EVEN IF MARKET IS OVERHIGH -> DONT GO AGAINST.
+______________________________________________________________
+
+The strategy the gpt model and me will work on and research on will primarily based on high mathematical models, we will use existing or new mathematics formulae to develop the strategy.  We will focus morely on mental analysis than on technical analysis. Learning how to redefine your trading activities in a way that allows
+you to completely accept the risk is the key to thinking like a successful trader.
+
+
+
+___________________________________________________________________
+//@version=5
+indicator("EMA Crossover with S/R and Volume", shorttitle="EMA+S/R+Vol", overlay=true)
+
+// EMAs
+ema3 = ta.ema(close, 3)
+ema30 = ta.ema(close, 30)
+// ema50 = ta.ema(close, 50)
+
+// Volume
+avgVolume = ta.sma(volume, 3)
+
+// RSI
+rsiValue = ta.rsi(close, 14)
+
+// Buy Condition
+buyCondition = ta.crossover(ema3, ema30) and volume > avgVolume
+
+// Plotting EMAs
+plot(ema3, color=color.red)
+plot(ema30, color=color.blue)
+//plot(ema50, color=color.orange)
+
+// Plot Buy Signal
+plotshape(series=buyCondition, title="Buy Signal", location=location.belowbar, color=color.green, style=shape.arrowup)
+
+// Support and Resistance
+lookback = 15 // Shorter lookback period for S/R levels
+var float support = na
+var float resistance = na
+
+// Finding support and resistance
+for i = 0 to lookback
+    if low[i] < support or na(support)
+        support := low[i]
+    if high[i] > resistance or na(resistance)
+        resistance := high[i]
+
+// Plotting S/R lines
+// plot(support, "Support", color=color.green, linewidth=1, style=plot.style_line)
+// plot(resistance, "Resistance", color=color.red, linewidth=1, style=plot.style_line)
+
+// Alerts
+alertcondition(buyCondition, title="Buy Alert", message="Potential Buy Signal based on EMA crossover, volume, and RSI conditions.")
